@@ -6,16 +6,29 @@ import Planner4 from './components/planner4/Planner4';
 
 const App = () => (
   <div className="App">
-    <h2>Todos</h2>
-    <br />
-    <Planner1 />
-    <br />
-    <Planner2 />
-    <br />
-    <Planner3 />
-    <br />
-    <Planner4 />
-    <br />
+    <h2>Planners</h2>
+    <div className="container">
+      <div className="row">
+        <div className="col-xs-12">
+          <Planner1 />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-xs-12">
+          <Planner2 />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-xs-12">
+          <Planner3 />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-xs-12">
+          <Planner4 />
+        </div>
+      </div>
+    </div>
   </div>
 );
 

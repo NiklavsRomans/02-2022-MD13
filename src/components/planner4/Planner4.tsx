@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Planner4.scss';
+import { faCoffee, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 type TaskProps = {
     text: string
@@ -121,8 +123,8 @@ const Planner4 = () => {
             {todoEditing === id ? (
               <button onClick={() => editTodo(id)}>Save</button>
             ) : (
-              <button onClick={() => setTodoEditing(id)}>
-                <i className="fas fa-trash" />
+              <button className="edit-btn" onClick={() => setTodoEditing(id)}>
+                <FontAwesomeIcon icon={faEdit} />
               </button>
             )}
             <button
