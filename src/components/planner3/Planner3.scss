@@ -1,0 +1,8 @@
+.todo-delete {
+    border: none;
+    background: transparent;
+    color: black;
+    &:hover {
+        color: red;
+    }
+}

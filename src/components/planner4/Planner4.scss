@@ -1,0 +1,29 @@
+.todo-delete {
+    border: none;
+    background: transparent;
+    color: black;
+    &:hover {
+        color: red;
+    }
+}
+
+.todo-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 70px;
+}
+
+.main-btn {
+    border-radius: 8px;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: white;
+    background-color: rgb(48, 48, 90);
+}
+
+.icon {
+    width: 100%;
+    max-width: 20px;
+}

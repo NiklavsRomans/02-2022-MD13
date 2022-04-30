@@ -1,0 +1,23 @@
+.todo {
+    max-width: 350px;
+    border: 2px solid black;
+    width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: rgb(85, 87, 112);
+}
+
+
+
+li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 15px;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 8px;
+}
