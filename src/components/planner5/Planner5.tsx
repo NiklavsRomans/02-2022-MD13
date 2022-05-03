@@ -16,6 +16,7 @@ const Planner5 = () => {
   const [inputText, setInputText] = useState('');
   const [todos, setTodos] = useState<TaskProps[]>([]);
   const [status, setStatus] = useState('all');
+  const [priorityStatus, setPriorityStatus] = useState('all');
   const [filteredTodos, setFilteredTodos] = useState<TaskProps[]>([]);
   const [todoEditing, setTodoEditing] = useState(0);
   const [editingText, setEditingText] = useState('');
@@ -47,6 +48,22 @@ const Planner5 = () => {
     setInputText('');
   };
 
+  const priorityHandler = () => {
+    switch (priorityStatus) {
+      case 'high-pr':
+        setFilteredTodos(todos.filter((todo) => todo.priority === 'high'));
+        break;
+      case 'medium-pr':
+        setFilteredTodos(todos.filter((todo) => todo.priority === 'medium'));
+        break;
+      case 'low-pr':
+        setFilteredTodos(todos.filter((todo) => todo.priority === 'low'));
+        break;
+      default:
+        setFilteredTodos(todos);
+    }
+  };
+
   const filterHandler = () => {
     switch (status) {
       case 'completed':
@@ -65,6 +82,10 @@ const Planner5 = () => {
     filterHandler();
   }, [todos, status]);
 
+  useEffect(() => {
+    priorityHandler();
+  }, [todos, priorityStatus]);
+
   const handleDelete = (id: number) => {
     const newLists = todos.filter((todo) => todo.id !== id);
     setTodos(newLists);
@@ -72,6 +93,7 @@ const Planner5 = () => {
 
   const statusHandler = (e: any) => {
     setStatus(e.target.value);
+    setPriorityStatus(e.target.value);
   };
 
   const editTodo = (id: number) => {
@@ -153,6 +175,11 @@ const Planner5 = () => {
           <button className="main-btn" onClick={statusHandler} value="all">All</button>
           <button className="main-btn" onClick={statusHandler} value="uncompleted">In progress</button>
           <button className="main-btn" onClick={statusHandler} value="completed">Completed</button>
+        </div>
+        <div className="priority-buttons">
+          <button className="main-btn" onClick={statusHandler} value="high-pr">High Priority</button>
+          <button className="main-btn" onClick={statusHandler} value="medium-pr">Medium Priority</button>
+          <button className="main-btn" onClick={statusHandler} value="low-pr">Low Priority</button>
         </div>
       </div>
     </div>

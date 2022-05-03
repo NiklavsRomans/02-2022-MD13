@@ -9,3 +9,12 @@
 .high {
     background-color: #d14c4e;
   }
+
+
+  .priority-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 30px;
+  }
