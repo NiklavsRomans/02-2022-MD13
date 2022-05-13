@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Planner5.scss';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
@@ -15,85 +15,45 @@ const Planner5 = () => {
   // States
   const [inputText, setInputText] = useState('');
   const [todos, setTodos] = useState<TaskProps[]>([]);
-  const [status, setStatus] = useState('all');
-  const [priorityStatus, setPriorityStatus] = useState('all');
   const [filteredTodos, setFilteredTodos] = useState<TaskProps[]>([]);
+  const [priorityy, setPriority] = useState('low');
   const [todoEditing, setTodoEditing] = useState(0);
   const [editingText, setEditingText] = useState('');
-  const [priorityy, setPriority] = useState('low');
 
   // Handlers
-
-  const toogleComplete = (id: number) => {
-    const updatedTodos = [...todos].map((todo) => {
-      if (todo.id === id) {
-        // eslint-disable-next-line no-param-reassign
-        todo.completed = !todo.completed;
-      }
-      return todo;
-    });
-    setTodos(updatedTodos);
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-
+  const handleSubmit = () => {
     const newTodo = {
       id: Math.random() * 1000,
       text: inputText,
       completed: false,
       priority: priorityy,
     };
-    setTodos([...todos].concat(newTodo));
+    setTodos([...todos, newTodo]);
+    setFilteredTodos([...todos, newTodo]);
     setInputText('');
   };
 
-  const priorityHandler = () => {
-    switch (priorityStatus) {
-      case 'high-pr':
-        setFilteredTodos(todos.filter((todo) => todo.priority === 'high'));
-        break;
-      case 'medium-pr':
-        setFilteredTodos(todos.filter((todo) => todo.priority === 'medium'));
-        break;
-      case 'low-pr':
-        setFilteredTodos(todos.filter((todo) => todo.priority === 'low'));
-        break;
-      default:
-        setFilteredTodos(todos);
-    }
+  const handleCompleted = (id:number) => {
+    const newTodo = [...filteredTodos].map((todo) => {
+      if (todo.id === id) {
+        // eslint-disable-next-line no-param-reassign
+        todo.completed = !todo.completed;
+      }
+      return todo;
+    });
+    setFilteredTodos(newTodo);
   };
-
-  const filterHandler = () => {
-    switch (status) {
-      case 'completed':
-        setFilteredTodos(todos.filter((todo) => todo.completed === true));
-        break;
-      case 'uncompleted':
-        setFilteredTodos(todos.filter((todo) => todo.completed === false));
-        break;
-      default:
-        setFilteredTodos(todos);
-        break;
-    }
-  };
-    // USE EFFECT
-  useEffect(() => {
-    filterHandler();
-  }, [todos, status]);
-
-  useEffect(() => {
-    priorityHandler();
-  }, [todos, priorityStatus]);
 
   const handleDelete = (id: number) => {
-    const newLists = todos.filter((todo) => todo.id !== id);
-    setTodos(newLists);
+    const newTodo = todos.filter((todo) => todo.id !== id);
+    setTodos(newTodo);
+    setFilteredTodos(newTodo);
   };
 
-  const statusHandler = (e: any) => {
-    setStatus(e.target.value);
-    setPriorityStatus(e.target.value);
+  const handleProgress = () => {
+    const doneTasks = todos.filter((todo) => todo.completed);
+    const calcLength = (doneTasks.length / todos.length) * 100;
+    return calcLength;
   };
 
   const editTodo = (id: number) => {
@@ -104,82 +64,98 @@ const Planner5 = () => {
       }
       return todo;
     });
-    setTodos(updatedTodos);
+    setFilteredTodos(updatedTodos);
     setTodoEditing(0);
     setEditingText('');
   };
 
+  const taskButtons = [
+    {
+      title: 'All',
+      onclick: () => {
+        setFilteredTodos([...todos]);
+      },
+    },
+    {
+      title: 'Completed',
+      onclick: () => {
+        const newTodos = [...todos];
+        setFilteredTodos(newTodos.filter((todo) => todo.completed));
+      },
+    },
+    {
+      title: 'In Progress',
+      onclick: () => {
+        const newTodos = [...todos];
+        setFilteredTodos(newTodos.filter((todo) => !todo.completed));
+      },
+    },
+    {
+      title: 'High Priority',
+      onclick: () => {
+        const newTodos = [...todos];
+        setFilteredTodos(newTodos.filter((todo) => todo.priority === 'High'));
+      },
+    },
+    {
+      title: 'Medium Priority',
+      onclick: () => {
+        const newTodos = [...todos];
+        setFilteredTodos(newTodos.filter((todo) => todo.priority === 'Medium'));
+      },
+    },
+    {
+      title: 'Low Priority',
+      onclick: () => {
+        const newTodos = [...todos];
+        setFilteredTodos(newTodos.filter((todo) => todo.priority === 'Low'));
+      },
+    },
+  ];
+
   return (
     <div className="todo">
-      <input
-        type="text"
-        className="todo-input"
-        placeholder="Add your todo here"
-        value={inputText}
-        onChange={(e) => setInputText(e.target.value)}
-      />
-      <select onChange={(e) => (setPriority(e.target.value))} value={priorityy} className="priority">
-        <option value="high">High</option>
-        <option value="medium">Medium</option>
-        <option value="low">Low</option>
+      <div className="progress-bar">
+        <div className="progress-line" style={{ width: `${handleProgress()}%` }} />
+      </div>
+      <input type="text" placeholder="Add your todo" onChange={(e) => setInputText(e.target.value)} value={inputText} />
+      <select onChange={(e) => setPriority(e.target.value)}>
+        <option>High</option>
+        <option>Medium</option>
+        <option>Low</option>
       </select>
-      <button
-        className="todo-btn"
-        onClick={handleSubmit}
-      >
-
-        Add
-
-      </button>
+      <button onClick={handleSubmit}>Add</button>
       <div className="todo-list">
-        {filteredTodos.map(({
-          text, completed, id, priority,
-        }) => (
-          <li className={`list-item ${priority}`}>
+        {filteredTodos.map((todo) => (
+          <li className={`${todo.priority}`}>
             <input
-              onChange={() => toogleComplete(id)}
               type="checkbox"
-              checked={completed}
+              checked={todo.completed}
+              onChange={() => handleCompleted(todo.id)}
             />
-            {todoEditing === id ? (
-              <input
-                type="text"
-                onChange={(e) => setEditingText(e.target.value)}
-                value={editingText}
-              />
+            {todoEditing === todo.id ? (
+              <input type="text" value={editingText} onChange={(e) => setEditingText(e.target.value)} />
             ) : (
-              <span className={`todo-item ${completed ? 'completed' : ''}`}>
-                {text}
-              </span>
+              <span className={`${todo.completed ? 'completed' : ''}`}>{todo.text}</span>
             )}
-            {todoEditing === id ? (
-              <button onClick={() => editTodo(id)}>Save</button>
+            {todoEditing === todo.id ? (
+              <button onClick={() => editTodo(todo.id)}>Save</button>
             ) : (
-              <button className="edit-btn" onClick={() => setTodoEditing(id)}>
+              <button
+                className="edit-btn"
+                onClick={() => setTodoEditing(todo.id)}
+              >
                 <FontAwesomeIcon icon={faEdit} />
+
               </button>
             )}
-            <button
-              className="todo-delete"
-              onClick={() => {
-                handleDelete(id);
-              }}
-            >
-              X
-
-            </button>
-
+            <button className="todo-delete" onClick={() => handleDelete(todo.id)}>X</button>
           </li>
         ))}
-        <div className="todo-buttons">
-          <button className="main-btn" onClick={statusHandler} value="all">All</button>
-          <button className="main-btn" onClick={statusHandler} value="uncompleted">In progress</button>
-          <button className="main-btn" onClick={statusHandler} value="completed">Completed</button>
-        </div>
-        <div className="priority-buttons">
-          <button className="main-btn" onClick={statusHandler} value="high-pr">High Priority</button>
-          <button className="main-btn" onClick={statusHandler} value="medium-pr">Medium Priority</button>
-          <button className="main-btn" onClick={statusHandler} value="low-pr">Low Priority</button>
+        <div className="todo-btns">
+          {taskButtons.map((button) => (
+            <button className="todo-new-btn" onClick={button.onclick}>{button.title}</button>
+          ))}
         </div>
       </div>
     </div>

@@ -1,20 +1,41 @@
-.low {
+.Low {
     background-color: #739c38;
   }
   
-.medium {
+.Medium {
     background-color: #ecb743;
   }
   
-.high {
+.High {
     background-color: #d14c4e;
   }
 
 
-  .priority-buttons {
+  .progress-line {
+    height: 10px;
+    background-color: rgba(21, 255, 0, 0.925);
+    border-radius: 8px;
+  }
+
+  .progress-bar {
+    padding: 20px;
+  }
+
+  .todo-btns {
+    margin-top: 70px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin-top: 30px;
+    gap: 10px;
+  }
+
+
+  .todo-new-btn {
+    padding: 5px 8px;
+    border-radius: 8px;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: white;
+    background-color: rgb(48, 48, 90);
   }
